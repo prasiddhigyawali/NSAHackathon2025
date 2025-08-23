@@ -1,0 +1,21 @@
+<!-- templates/base.html -->
+
+{% load bootstrap5 %}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>greenwise.ai</title>
+        <link rel ="icon" href="{% static 'favicon.png' %}" type="image/x-icon">
+    </head>
+
+    <body style="background-color: #F1F0E4;">
+        <main>
+            {% block content %}{% endblock content %}
+        </main>
+    </body>
+</html>
