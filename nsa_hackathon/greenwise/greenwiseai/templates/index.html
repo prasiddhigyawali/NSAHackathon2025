@@ -1,6 +1,16 @@
 {% extends "base.html" %}
-
+{% load static %}
 
 {% block content %}
 {% include "navbar.html"%}
+
+<div class="recorder p-3">
+    <button id="recordBtn" class="record">Record</button>
+    <br>
+</div>
+
 {% endblock content %}
+
+{% block page_script %}
+<script type="text/javascript" src="{% static 'js/record.js' %}"></script> 
+{% endblock page_script %}
