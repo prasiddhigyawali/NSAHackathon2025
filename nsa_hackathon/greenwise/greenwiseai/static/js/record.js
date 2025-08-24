@@ -70,6 +70,8 @@ function saveRecording() {
     .then(data => {
         if (data.success) {
             console.log("SUCCESS:", data);
+            console.log("TRANSCRIPT: " + data.transcript);
+            console.log("TRANSLATION: " + data.translation);
             setTimeout(() => location.reload(), 1000);
         } else {
             console.log("FAIL:", data);

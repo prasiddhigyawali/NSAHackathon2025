@@ -5,6 +5,10 @@ from django.template import loader
 import google.generativeai as genai
 from django.views.decorators.csrf import csrf_exempt
 from .models import AudioRecording
+from django.core.files.base import ContentFile
+from pydub import AudioSegment
+from google.cloud import speech
+from google.cloud import translate_v2 as translate 
 
 genai.configure(api_key="YourAPI-Key")
 
@@ -21,18 +25,71 @@ def recorder(request):
 @csrf_exempt
 def save(request):
     if request.method == 'POST':
-        print("FILES:", request.FILES)
-        print("POST:", request.POST)
         title = request.POST.get('title', 'New Recording')
-        audio_file = request.FILES.get('audio_file') 
+        uploaded_file = request.FILES.get('audio_file')
         
-        if audio_file:
+        if uploaded_file:
+            # convert uploaded webm to mp3
+            audio = AudioSegment.from_file(uploaded_file, format="webm")
+            mp3_io = ContentFile(b"")
+            audio.export(mp3_io, format="mp3")
+            mp3_io.seek(0)
+            
+            # save to model
             recording = AudioRecording.objects.create(
                 title=title,
-                audio_file=audio_file
+                audio_file=ContentFile(mp3_io.read(), name='recording.mp3')
             )
-            return JsonResponse({'success': True, 'id': recording.id})
-    
-    return JsonResponse({'success': False})
+
+            # Get transcript
+            transcript = speech_to_text(recording)
+
+            # Translate Nepali -> English
+            translation = translate_np_to_eng(transcript)
+
+            return JsonResponse({
+                'success': True,
+                'id': recording.id,
+                'transcript': transcript,
+                'translation': translation
+            })
+
+    return JsonResponse({'success': False, 'error': 'Invalid method'})
+
+def speech_to_text(recording):
+    client = speech.SpeechClient()
+    with open(recording.audio_file.path, 'rb') as f:
+        audio_content = f.read()
+
+    audio = speech.RecognitionAudio(content=audio_content)
+    config = speech.RecognitionConfig(
+        encoding=speech.RecognitionConfig.AudioEncoding.MP3,  # match saved MP3
+        sample_rate_hertz=48000,
+        language_code="ne-NP"  # Nepali
+    )
+
+    try:
+        response = client.recognize(config=config, audio=audio)
+        transcript = ' '.join(result.alternatives[0].transcript for result in response.results)
+    except Exception as e:
+        print("Google Speech API error:", e)
+        transcript = ''
+
+    return transcript
+
+def translate_np_to_eng(transcript):
+    if not transcript:
+        return ''
+
+    try:
+        translate_client = translate.Client()
+        translation = translate_client.translate(transcript, target_language='en')
+        return translation['translatedText']
+    except Exception as e:
+        print("Google Translate API error:", e)
+        return ''
+
+
+
 
 
