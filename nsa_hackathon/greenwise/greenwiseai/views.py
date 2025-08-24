@@ -15,6 +15,7 @@ from pydub import AudioSegment
 from google.cloud import speech
 from google.cloud import translate_v2 as translate 
 from openai import OpenAI
+import google.generativeai as genai
 import json
 import re
 
@@ -405,6 +406,28 @@ def translate_np_to_eng(transcript):
     except Exception as e:
         print("Google Translate API error:", e)
         return ''
+    
+def convert_to_nepali_digits(text: str) -> str:
+    mapping = str.maketrans("0123456789", "०१२३४५६७८९")
+    return str(text).translate(mapping)
+
+def translate_eng_to_np(data):
+    """Recursively translate strings inside a JSON-like dict/list from English to Nepali."""
+    translate_client = translate.Client()
+
+    def translate_value(value):
+        if isinstance(value, int):
+            return convert_to_nepali_digits(value)
+        elif isinstance(value, dict):
+            return {k: translate_value(v) for k, v in value.items()}
+        elif isinstance(value, list):
+            return [translate_value(v) for v in value]
+        else:
+            return value  # numbers, bools, etc.
+
+    translated = translate_value(data)
+
+    return translated
 
 
 def prompt_engineering(translation):
@@ -419,7 +442,8 @@ def prompt_engineering(translation):
         store=True,
     )
 
-    json_data = parse_json_response(response.output_text)
+    json_data = translate_eng_to_np(parse_json_response(response.output_text))
+
     print(json_data)
 
     return json_data

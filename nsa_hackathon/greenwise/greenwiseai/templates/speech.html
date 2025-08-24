@@ -2,25 +2,44 @@
 {% load static %}
 
 {% block content %}
-{% include "navbar.html"%}
 
-<!-- Record Button -->
-<div class="d-flex justify-content-center align-items-start vh-100 pt-5"> 
-    <button id="recordBtn" type="button" class="btn p-0 border-0 bg-transparent"> 
-        <img src="{% static 'logo/mic.png' %}" alt="Record" class="rounded-circle img-fluid" style="width:320px; height:320px; object-fit:cover;"> 
-    </button> 
+<!-- Record Section -->
+<div class="d-flex flex-column justify-content-start align-items-center vh-100 pt-5" id="record">
+
+  <!-- Instruction Text -->
+  <div class="mb-4 px-3" style="max-width: 50%; text-align: center;">
+    <h4 class="lang-content" data-lang="ne">
+      नमस्ते! तपाईंको स्थान कहाँ हो? त्यसपछि, कृपया बताउनुहोस्, तपाईंको खेतको क्षेत्रफल कति छ। 
+      अहिले के बाली गर्दै हुनुहुन्छ? र तपाईंको बाली कहिले सुरु भयो? धन्यवाद, 
+      तपाईंको जानकारी सुरक्षित रूपमा संकलन गरिनेछ र हामी तपाईंलाई विशिष्ट सुझावहरू प्रदान गर्नेछौं।
+    </h4>
+    <h4 class="lang-content hidden" data-lang="en">
+      Hello! Where is your location? Then, please tell us, what is the area of ​​your farm.
+       What crop are you currently growing? And when did your crop start? 
+       Thank you, your information will be securely stored and we will provide you with specific suggestions.
+    </h4>
+  </div>
+
+  <!-- Record Button -->
+  <div>
+    <button id="recordBtn" type="button" class="btn p-0 border-0 bg-transparent">
+      <img src="{% static 'logo/mic.png' %}" alt="Record" class="rounded-circle img-fluid" style="width:320px; height:320px; object-fit:cover;">
+    </button>
+  </div>
+
 </div>
 
+
 <!-- Dashboard (hidden by default) -->
-<div class="container d-none" id="dashboard">
+<div class="container d-none mt-4" id="dashboard">
   <div class="header">
-    <h3>Farm Management Dashboard</h3>
+    <h3>खेत व्यवस्थापन ड्यासबोर्ड</h3>
   </div>
 
   <div class="dashboard-grid">
     <div class="card planting mb-3" id="planting-card">
       <div class="card-header">
-        <label class="card-title">Planting Data</label>
+        <label class="card-title">रोपण डाटा</label>
       </div>
       <div id="planting-data" class="card-body">
         <!-- Data will be populated by JavaScript -->
@@ -29,7 +48,7 @@
 
     <div class="card water mb-3" id="water-card">
       <div class="card-header">
-        <label class="card-title">Water Management</label>
+        <label class="card-title">पानी व्यवस्थापन</label>
       </div>
       <div id="water-data" class="card-body">
         <!-- Data will be populated by JavaScript -->
@@ -38,7 +57,7 @@
 
     <div class="card weather mb-3" id="weather-card">
       <div class="card-header">
-        <label class="card-title">Weather Conditions</label>
+        <label class="card-title">मौसम अवस्था</label>
       </div>
       <div id="weather-data" class="card-body">
         <!-- Data will be populated by JavaScript -->
@@ -47,7 +66,7 @@
 
     <div class="card harvest mb-3" id="harvest-card">
       <div class="card-header">
-        <label class="card-title">Projected Harvest</label>
+        <label class="card-title">प्रक्षेपित फसल</label>
       </div>
       <div id="harvest-data" class="card-body">
         <!-- Data will be populated by JavaScript -->

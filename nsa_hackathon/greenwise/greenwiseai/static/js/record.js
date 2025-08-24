@@ -1,39 +1,39 @@
-let mediaRecorder;
-let recordedChunks = [];
-let isRecording = false;
+let mediaRecorder_real;
+let recordedChunks_real = [];
+let isRecording_real = false;
 
 const recordBtn = document.getElementById('recordBtn');
 
 recordBtn.addEventListener('click', toggleRecording);
 
 async function toggleRecording() {
-    if (!isRecording) {
-        startRecording();
+    if (!isRecording_real) {
+        startRecording_real();
     } else {
-        stopRecording();
+        stopRecording_real();
     }
 }
 
-async function startRecording() {
-    recordedChunks = [];
+async function startRecording_real() {
+    recordedChunks_real = [];
     
     try {
         const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-        mediaRecorder = new MediaRecorder(stream);
+        mediaRecorder_real = new MediaRecorder(stream);
         
-        mediaRecorder.ondataavailable = function(event) {
+        mediaRecorder_real.ondataavailable = function(event) {
             if (event.data.size > 0) {
-                recordedChunks.push(event.data);
+                recordedChunks_real.push(event.data);
             }
         };
         
         // Only save when recording has fully stopped
-        mediaRecorder.onstop = function() {
-            saveRecording();
+        mediaRecorder_real.onstop = function() {
+            saveRecording_real();
         };
         
-        mediaRecorder.start();
-        isRecording = true;
+        mediaRecorder_real.start();
+        isRecording_real = true;
         
         recordBtn.className = 'stop';
         console.log("Recording started...");
@@ -43,19 +43,19 @@ async function startRecording() {
     }
 }
 
-function stopRecording() {
-    if (mediaRecorder && mediaRecorder.state !== "inactive") {
-        mediaRecorder.stop();
+function stopRecording_real() {
+    if (mediaRecorder_real && mediaRecorder_real.state !== "inactive") {
+        mediaRecorder_real.stop();
         console.log("Recording stopped...");
     }
-    isRecording = false;
+    isRecording_real = false;
     recordBtn.className = 'record';
 }
 
-function saveRecording() {
-    console.log("Chunks recorded:", recordedChunks.length);
+function saveRecording_real() {
+    console.log("Chunks recorded:", recordedChunks_real.length);
 
-    const audioBlob = new Blob(recordedChunks, { type: 'audio/webm' }); // webm is safer
+    const audioBlob = new Blob(recordedChunks_real, { type: 'audio/webm' }); // webm is safer
     const title = 'New Recording';
     
     const formData = new FormData();
@@ -86,37 +86,27 @@ function saveRecording() {
 
 
 const unitMapping = {
-    "Seeds per acre": "seeds",
-    "Planting depth": "mm",
-    "Row spacing": "mm",
-    "Weekly irrigation": "time/week",
-    "Rainfall this month": "mm",
-    "Average temperature": "°C",
-    "Expected yield": "tons/acre",
-    "Expected revenue per acre": "NPR"
+    "Seeds per acre": ["प्रति एकड बिउ", "बिउ"],
+    "Planting depth": ["रोपाइँको गहिराइ", "मिलिमिटर"],
+    "Row spacing": ["पंक्ति बीचको दुरी", "मिलिमिटर"],
+    "Weekly irrigation": ["साप्ताहिक सिंचाइ", "पटक प्रति हप्ता"],
+    "Rainfall this month": ["यस महिनाको वर्षा", "मिलिमिटर"],
+    "Average temperature": ["औसत तापक्रम", "डिग्री सेल्सियस"],
+    "Expected yield": ["अपेक्षित उत्पादन", "टन प्रति एकड"],
+    "Expected revenue per acre": ["प्रति एकड अपेक्षित आम्दानी", "नेपाली रुपैयाँ"]
 };
-
-// Function to format numbers
-function formatNumber(value, key) {
-    if (key === "Seeds per acre") {
-        return value.toLocaleString();
-    }
-    if (key === "Expected revenue per acre") {
-        return `${value}`;
-    }
-    return value.toString();
-}
 
 // Function to create data item HTML
 function createDataItem(key, value) {
-    const formattedValue = formatNumber(value, key);
-    const unit = unitMapping[key];
-    const unitSpan = key === "Expected revenue per acre" ? "" : ` <span class="unit">${unit}</span>`;
+    const mapping = unitMapping[key];  // <- This line was missing!
+    const translatedLabel = mapping[0];
+    const unit = mapping[1];
+    const unitSpan = ` <span class="unit">${unit}</span>`;
     
     return `
         <div class="data-item">
-            <span class="data-label">${key}: </span>
-            <span class="data-value">${formattedValue}${unitSpan}</span>
+            <span class="data-label">${translatedLabel}: </span>
+            <span class="data-value">${value}${unitSpan}</span>
         </div>
     `;
 }
@@ -153,6 +143,14 @@ function populateData(farmData) {
 }
 
 function showDashboard() {
-    document.getElementById("dashboard").classList.remove("d-none");
-    document.getElementById("record").classList.add("d-none");
-  }
+    const dashboard = document.getElementById("dashboard");
+    const record = document.getElementById("record");
+    
+    if (dashboard) {
+        dashboard.classList.remove("d-none");
+    }
+    
+    if (record) {
+        record.classList.add("d-none");
+    }
+}
