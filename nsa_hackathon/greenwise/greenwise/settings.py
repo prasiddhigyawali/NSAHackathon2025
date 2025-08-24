@@ -25,6 +25,10 @@ MEDIA_ROOT = BASE_DIR / 'media'
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-2a#7^c(7%#s@0=2-$dul()bx8llj46)8he53#wql4%q-8c)$ih'
+OPENAI_KEY_FILE = BASE_DIR.parent / "api_keys" / "openai_key.txt"
+
+with open(OPENAI_KEY_FILE, "r") as f:
+    OPENAI_API_KEY = f.read().strip()
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -42,7 +46,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'greenwiseai',
-    'bootstrap5',
+    'django_bootstrap5',
     'corsheaders'
 ]
 
@@ -133,3 +137,7 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+BOOTSTRAP5 = {
+    'required_css_class': 'required',
+}

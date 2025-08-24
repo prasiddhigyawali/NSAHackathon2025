@@ -1,0 +1,324 @@
+:root {
+    --primary-green: #2E7D32;
+    --light-green: #81C784;
+    --accent-green: #4CAF50;
+    --earth-brown: #8D6E63;
+    --warm-yellow: #FFB74D;
+    --bg-cream: #F9F7ED;
+}
+
+body {
+    background: linear-gradient(135deg, var(--bg-cream) 0%, #E8F5E8 100%);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    min-height: 100vh;
+}
+
+.navbar {
+    background: linear-gradient(90deg, var(--primary-green), var(--accent-green));
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.navbar-brand {
+    color: white !important;
+    font-size: 1.8rem;
+    font-weight: bold;
+}
+
+.logo-icon {
+    width: 40px;
+    height: 40px;
+    background: var(--warm-yellow);
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 10px;
+}
+
+.chat-container {
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.1);
+    min-height: 500px;
+    display: flex;
+    flex-direction: column;
+}
+
+.chat-header {
+    background: linear-gradient(90deg, var(--accent-green), var(--light-green));
+    color: white;
+    padding: 15px 20px;
+    border-radius: 20px 20px 0 0;
+    display: flex;
+    align-items: center;
+}
+
+.chat-messages {
+    flex: 1;
+    padding: 20px;
+    overflow-y: auto;
+    max-height: 400px;
+}
+
+.message {
+    margin-bottom: 15px;
+    display: flex;
+}
+
+.message.user {
+    justify-content: flex-end;
+}
+
+.message-bubble {
+    max-width: 80%;
+    padding: 12px 18px;
+    border-radius: 18px;
+    position: relative;
+}
+
+.message.user .message-bubble {
+    background: var(--primary-green);
+    color: white;
+}
+
+.message.ai .message-bubble {
+    background: #F1F8E9;
+    color: #2E7D32;
+    border: 2px solid var(--light-green);
+}
+
+.input-area {
+    padding: 20px;
+    border-top: 2px solid #E8F5E8;
+}
+
+.voice-btn {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: linear-gradient(45deg, var(--accent-green), var(--light-green));
+    color: white;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.voice-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 5px 20px rgba(76, 175, 80, 0.4);
+}
+
+.voice-btn.recording {
+    background: linear-gradient(45deg, #F44336, #FF5722);
+    animation: pulse 1.5s ease-in-out infinite alternate;
+}
+
+@keyframes pulse {
+    0% { box-shadow: 0 0 0 0 rgba(244, 67, 54, 0.7); }
+    100% { box-shadow: 0 0 0 20px rgba(244, 67, 54, 0); }
+}
+
+.send-btn {
+    background: var(--primary-green);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    padding: 10px 20px;
+    transition: all 0.3s ease;
+}
+
+.send-btn:hover {
+    background: var(--accent-green);
+    transform: translateY(-2px);
+}
+
+.weather-card, .news-card {
+    background: white;
+    border-radius: 15px;
+    padding: 20px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    margin-bottom: 20px;
+}
+
+.weather-icon {
+    width: 60px;
+    height: 60px;
+    background: linear-gradient(45deg, var(--warm-yellow), #FFC107);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    color: white;
+}
+
+.news-item {
+    padding: 10px 0;
+    border-bottom: 1px solid #E8F5E8;
+}
+
+.news-item:last-child {
+    border-bottom: none;
+}
+
+.farmer-avatar {
+    width: 50px;
+    height: 50px;
+    background: linear-gradient(45deg, var(--earth-brown), #A1887F);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 1.2rem;
+}
+
+.ai-avatar {
+    width: 50px;
+    height: 50px;
+    background: linear-gradient(45deg, var(--accent-green), var(--light-green));
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 1.2rem;
+}
+
+.location-badge {
+    background: var(--warm-yellow);
+    color: var(--primary-green);
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.floating-action {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: var(--primary-green);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    font-size: 1.5rem;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+    transition: all 0.3s ease;
+}
+
+.floating-action:hover {
+    transform: scale(1.1);
+    background: var(--accent-green);
+}
+
+.typing-indicator {
+    display: none;
+    padding: 10px;
+}
+
+.typing-dots {
+    display: inline-block;
+    position: relative;
+    width: 40px;
+    height: 10px;
+}
+
+.typing-dots div {
+    position: absolute;
+    top: 0;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--accent-green);
+    animation: typing 1.4s infinite ease-in-out both;
+}
+
+.typing-dots div:nth-child(1) { left: 0; animation-delay: -0.32s; }
+.typing-dots div:nth-child(2) { left: 12px; animation-delay: -0.16s; }
+.typing-dots div:nth-child(3) { left: 24px; animation-delay: 0s; }
+
+@keyframes typing {
+    0%, 80%, 100% {
+        transform: scale(0);
+        opacity: 0.5;
+    }
+    40% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.feature-card {
+    text-align: center;
+    padding: 20px;
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+}
+
+.feature-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+}
+
+.feature-icon {
+    width: 60px;
+    height: 60px;
+    background: linear-gradient(45deg, var(--accent-green), var(--light-green));
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 15px;
+    color: white;
+    font-size: 1.5rem;
+}
+
+/* Language Switcher */
+.language-switcher {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 25px;
+    padding: 5px;
+    display: flex;
+    align-items: center;
+}
+
+.lang-btn {
+    background: transparent;
+    border: none;
+    color: white;
+    padding: 8px 15px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.lang-btn.active {
+    background: white;
+    color: var(--primary-green);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+}
+
+.lang-btn:hover:not(.active) {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+/* Hidden class for translations */
+.lang-content {
+    display: block;
+}
+
+.lang-content.hidden {
+    display: none;
+}

@@ -1,0 +1,849 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" id="aboutHtml">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>About Us - GreenWise.ai</title>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+<style>
+:root {
+    --primary-green: #2E7D32;
+    --light-green: #81C784;
+    --accent-green: #4CAF50;
+    --earth-brown: #8D6E63;
+    --warm-yellow: #FFB74D;
+    --bg-cream: #F9F7ED;
+}
+
+body {
+    background: linear-gradient(135deg, var(--bg-cream) 0%, #E8F5E8 100%);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    min-height: 100vh;
+}
+
+.navbar {
+    background: linear-gradient(90deg, rgba(46, 125, 50, 0.9), rgba(76, 175, 80, 0.9));
+    backdrop-filter: blur(10px);
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.navbar-brand {
+    color: white !important;
+    font-size: 1.8rem;
+    font-weight: bold;
+}
+
+/* Language Switcher */
+.language-switcher {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 25px;
+    padding: 5px;
+    display: flex;
+    align-items: center;
+}
+
+.lang-btn {
+    background: transparent;
+    border: none;
+    color: white;
+    padding: 8px 15px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.lang-btn.active {
+    background: white;
+    color: var(--primary-green);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+}
+
+.lang-btn:hover:not(.active) {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.lang-content {
+    display: block;
+}
+
+.lang-content.hidden {
+    display: none;
+}
+
+.location-badge {
+    background: var(--warm-yellow);
+    color: var(--primary-green);
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.nav-link {
+    color: white !important;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.nav-link:hover {
+    color: var(--warm-yellow) !important;
+    transform: translateY(-1px);
+}
+
+.hero-section {
+    background: linear-gradient(135deg, var(--primary-green), var(--accent-green));
+    color: white;
+    padding: 100px 0;
+    position: relative;
+    overflow: hidden;
+}
+
+.hero-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="50" cy="50" r="2" fill="rgba(255,255,255,0.1)"/><circle cx="20" cy="20" r="1" fill="rgba(255,255,255,0.05)"/><circle cx="80" cy="30" r="1.5" fill="rgba(255,255,255,0.08)"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>') repeat;
+    opacity: 0.3;
+}
+
+.hero-content {
+    position: relative;
+    z-index: 2;
+}
+
+.company-logo {
+    width: 100px;
+    height: 100px;
+    background: white;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 30px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+}
+
+.section-title {
+    color: var(--primary-green);
+    font-weight: bold;
+    margin-bottom: 40px;
+    position: relative;
+    text-align: center;
+}
+
+.section-title::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 4px;
+    background: linear-gradient(90deg, var(--accent-green), var(--warm-yellow));
+    border-radius: 2px;
+}
+
+.mission-card {
+    background: white;
+    border-radius: 20px;
+    padding: 40px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+    margin-bottom: 30px;
+    border-left: 5px solid var(--accent-green);
+    position: relative;
+    overflow: hidden;
+}
+
+.mission-card::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -50%;
+    width: 200px;
+    height: 200px;
+    background: linear-gradient(45deg, var(--light-green), transparent);
+    border-radius: 50%;
+    opacity: 0.1;
+}
+
+.mission-icon {
+    width: 60px;
+    height: 60px;
+    background: linear-gradient(45deg, var(--accent-green), var(--light-green));
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+}
+
+.team-card {
+    background: white;
+    border-radius: 20px;
+    padding: 30px;
+    text-align: center;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+    border-top: 4px solid var(--accent-green);
+    position: relative;
+    overflow: hidden;
+}
+
+.team-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+}
+
+.team-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--accent-green), var(--warm-yellow));
+}
+
+.team-avatar {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    margin: 0 auto 20px;
+    background: linear-gradient(45deg, var(--light-green), var(--accent-green));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 2rem;
+    font-weight: bold;
+    border: 4px solid white;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+    position: relative;
+    overflow: hidden;   /* ✅ force image inside */
+}
+
+.team-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;   /* ✅ crop nicely */
+    border-radius: 50%;  /* ✅ circle clip */
+}
+
+.team-name {
+    font-size: 1.3rem;
+    font-weight: bold;
+    color: var(--primary-green);
+    margin-bottom: 5px;
+}
+
+.team-role {
+    color: var(--accent-green);
+    font-weight: 500;
+    margin-bottom: 15px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-size: 0.9rem;
+}
+
+.stats-section {
+    background: linear-gradient(135deg, var(--primary-green), var(--accent-green));
+    color: white;
+    padding: 80px 0;
+    position: relative;
+}
+
+.stat-item {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.stat-number {
+    font-size: 3rem;
+    font-weight: bold;
+    display: block;
+    margin-bottom: 10px;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+}
+
+.stat-label {
+    font-size: 1.1rem;
+    opacity: 0.9;
+}
+
+.data-visualization {
+    background: white;
+    border-radius: 20px;
+    padding: 40px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+    margin: 40px 0;
+}
+
+.data-point {
+    background: linear-gradient(45deg, var(--light-green), var(--accent-green));
+    color: white;
+    padding: 20px;
+    border-radius: 15px;
+    text-align: center;
+    margin: 10px;
+    flex: 1;
+    min-height: 120px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    box-shadow: 0 5px 20px rgba(76, 175, 80, 0.3);
+    transition: all 0.3s ease;
+}
+
+.data-point:hover {
+    transform: scale(1.05);
+    box-shadow: 0 8px 25px rgba(76, 175, 80, 0.4);
+}
+
+.contact-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+    padding: 15px;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+
+.contact-icon {
+    width: 40px;
+    height: 40px;
+    background: var(--accent-green);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    margin-right: 15px;
+}
+
+.floating-elements {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.floating-icon {
+    position: absolute;
+    color: rgba(255,255,255,0.1);
+    font-size: 2rem;
+    animation: float 6s ease-in-out infinite;
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-20px); }
+}
+
+.floating-icon:nth-child(1) { top: 20%; left: 10%; animation-delay: 0s; }
+.floating-icon:nth-child(2) { top: 60%; right: 15%; animation-delay: 2s; }
+.floating-icon:nth-child(3) { bottom: 30%; left: 20%; animation-delay: 4s; }
+
+.quote-box {
+    background: linear-gradient(135deg, var(--warm-yellow), #FFC107);
+    color: var(--primary-green);
+    padding: 30px;
+    border-radius: 20px;
+    font-style: italic;
+    font-size: 1.2rem;
+    text-align: center;
+    margin: 40px 0;
+    position: relative;
+    box-shadow: 0 10px 30px rgba(255, 183, 77, 0.3);
+}
+
+.quote-box::before {
+    content: '"';
+    font-size: 4rem;
+    position: absolute;
+    top: -10px;
+    left: 20px;
+    opacity: 0.3;
+}
+
+@media (max-width: 768px) {
+    .hero-section {
+        padding: 60px 0;
+    }
+    
+    .team-card {
+        margin-bottom: 30px;
+    }
+    
+    .stat-number {
+        font-size: 2rem;
+    }
+    
+    .data-point {
+        margin: 5px;
+        min-height: 100px;
+    }
+}
+</style>
+</head>
+<body>
+<!-- Navigation -->
+<nav class="navbar navbar-expand-lg">
+<div class="container">
+    <a class="navbar-brand d-flex align-items-center" href="{% url 'home' %}">
+        <img src="{% static 'logo/favicon.png' %}" width="40" height="40" class="me-2" alt="Krisi Sahayak Logo">
+        <span class="lang-content" data-lang="ne">कृषि सहायक</span>
+        <span class="lang-content hidden" data-lang="en">Farm Assistant</span>
+    </a>
+    
+    <!-- Language Switcher -->
+    <div class="language-switcher me-3">
+        <button class="lang-btn active" data-lang="ne" onclick="switchLanguage('ne')">
+            नेपाली
+        </button>
+        <button class="lang-btn" data-lang="en" onclick="switchLanguage('en')">
+            English
+        </button>
+    </div>
+    
+    <div class="d-flex align-items-center">
+        <a class="nav-link text-white me-3" href="{% url 'home' %}">
+            <i class="fas fa-home me-1"></i>
+            <span class="lang-content" data-lang="ne">गृहपृष्ठ</span>
+            <span class="lang-content hidden" data-lang="en">Home</span>
+        </a>
+        <a class="nav-link text-white me-3" href="#contact">
+            <i class="fas fa-info-circle me-1"></i>
+            <span class="lang-content" data-lang="ne">हाम्रो बारेमा</span>
+            <span class="lang-content hidden" data-lang="en">About Us</span>
+        </a>
+        <span class="location-badge me-3">
+            <i class="fas fa-map-marker-alt me-1"></i>
+            <span class="lang-content" data-lang="ne">काठमाडौं, नेपाल</span>
+            <span class="lang-content hidden" data-lang="en">Kathmandu, Nepal</span>
+        </span>
+    </div>
+</div>
+</nav>
+
+<!-- Hero Section -->
+<section class="hero-section">
+<div class="floating-elements">
+    <i class="floating-icon fas fa-seedling"></i>
+    <i class="floating-icon fas fa-leaf"></i>
+    <i class="floating-icon fas fa-tractor"></i>
+</div>
+
+<div class="container">
+    <div class="hero-content text-center">
+        <div class="company-logo">
+            <img src="{% static 'logo/favicon.png' %}" width="60" height="60" alt="GreenWise.ai">
+        </div>
+        <h1 class="display-4 fw-bold mb-4">GreenWise.ai</h1>
+        <p class="lead mb-4">
+            <span class="lang-content" data-lang="ne">प्रविधिको माध्यमबाट नेपालको कृषि भविष्यलाई सशक्त बनाउँदै</span>
+            <span class="lang-content hidden" data-lang="en">Empowering Nepal's Agricultural Future Through Technology</span>
+        </p>
+        <div class="quote-box">
+            <span class="lang-content" data-lang="ne">सँगै, हामी प्रविधि र पहुँचबीचको दूरीलाई कम गर्छौं।</span>
+            <span class="lang-content hidden" data-lang="en">Together, we bridge the gap between technology and accessibility.</span>
+        </div>
+    </div>
+</div>
+</section>
+
+<!-- Mission & Vision -->
+<section class="py-5">
+<div class="container">
+    <h2 class="section-title">
+        <span class="lang-content" data-lang="ne">हाम्रो मिशन</span>
+        <span class="lang-content hidden" data-lang="en">Our Mission</span>
+    </h2>
+    
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="mission-card">
+                <div class="mission-icon">
+                    <i class="fas fa-bullseye"></i>
+                </div>
+                <h4 style="color: var(--primary-green);">
+                    <span class="lang-content" data-lang="ne">मिशन</span>
+                    <span class="lang-content hidden" data-lang="en">Mission</span>
+                </h4>
+                <p>
+                    <span class="lang-content" data-lang="ne">नेपाली किसानहरूलाई आवाज-संचालित AI सहायकको साथ सशक्त बनाउनु जसले वास्तविक समयको बजार र मौसम जानकारी प्रदान गर्छ, नाफाको मार्जिन बढाउँदै, र नेपालको कृषि डेटा अंतर बन्द गर्न केन्द्रीकृत डेटा बैंक निर्माण गर्नु।</span>
+                    <span class="lang-content hidden" data-lang="en">To empower Nepalese farmers with a voice-driven AI assistant that delivers real-time market and weather insights, boosting profit margins, while building a centralized data bank to close Nepal's agricultural data gap.</span>
+                </p>
+            </div>
+        </div>
+        
+        <div class="col-lg-6">
+            <div class="mission-card">
+                <div class="mission-icon">
+                    <i class="fas fa-eye"></i>
+                </div>
+                <h4 style="color: var(--primary-green);">
+                    <span class="lang-content" data-lang="ne">दृष्टिकोण</span>
+                    <span class="lang-content hidden" data-lang="en">Vision</span>
+                </h4>
+                <p>
+                    <span class="lang-content" data-lang="ne">नेपालमा कृषि डेटाको पहिलो केन्द्रीय भण्डार सिर्जना गर्नु, जसले किसानहरूलाई व्यक्तिगत सल्लाह, NGOs लाई वास्तविकता, र नीति निर्माताहरूलाई खाद्य सुरक्षाको भविष्य आकार दिन कार्यान्वयनयोग्य अंतर्दृष्टि प्रदान गर्छ।</span>
+                    <span class="lang-content hidden" data-lang="en">To create the first central repository of agricultural data in Nepal, empowering farmers with personalized advice, NGOs with ground realities, and policymakers with actionable insights to shape the future of food security.</span>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Data Gap Problem -->
+    <div class="data-visualization">
+        <h3 class="text-center mb-4" style="color: var(--primary-green);">
+            <span class="lang-content" data-lang="ne">हामीले समाधान गरिरहेको चुनौती</span>
+            <span class="lang-content hidden" data-lang="en">The Challenge We're Solving</span>
+        </h3>
+        <div class="row">
+            <div class="col-md-12 mb-4">
+                <div class="alert alert-warning" style="border-left: 5px solid var(--warm-yellow);">
+                    <strong>
+                        <span class="lang-content" data-lang="ne">समस्या:</span>
+                        <span class="lang-content hidden" data-lang="en">The Problem:</span>
+                    </strong> 
+                    <span class="lang-content" data-lang="ne">आज, नेपालसँग कृषिको लागि कुनै केन्द्रीय, भरपर्दो डेटासेट छैन। यसले ठूलो सूचना अंतर सिर्जना गर्छ जसले किसानहरूलाई हानि पुर्याउँछ, NGO को प्रभावकारिता सीमित गर्छ, र नीति निर्माताहरूलाई वास्तविकताबाट अन्धा बनाउँछ।</span>
+                    <span class="lang-content hidden" data-lang="en">Today, Nepal has no central, credible dataset for agriculture. This creates a massive information gap that hurts farmers, limits NGO effectiveness, and blinds policymakers to ground realities.</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col-md-4">
+                <div class="data-point">
+                    <i class="fas fa-database fa-2x mb-3"></i>
+                    <strong>
+                        <span class="lang-content" data-lang="ne">पहिलो केन्द्रीय भण्डार</span>
+                        <span class="lang-content hidden" data-lang="en">First Central Repository</span>
+                    </strong>
+                    <p class="mb-0">
+                        <span class="lang-content" data-lang="ne">नेपालको कृषि डेटा आधार निर्माण</span>
+                        <span class="lang-content hidden" data-lang="en">Building Nepal's agricultural data foundation</span>
+                    </p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="data-point">
+                    <i class="fas fa-microphone fa-2x mb-3"></i>
+                    <strong>
+                        <span class="lang-content" data-lang="ne">आवाज-संचालित अंतर्दृष्टि</span>
+                        <span class="lang-content hidden" data-lang="en">Voice-Driven Insights</span>
+                    </strong>
+                    <p class="mb-0">
+                        <span class="lang-content" data-lang="ne">हरेक किसानको प्रश्न मूल्यवान डेटा बन्छ</span>
+                        <span class="lang-content hidden" data-lang="en">Every farmer query becomes valuable data</span>
+                    </p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="data-point">
+                    <i class="fas fa-chart-line fa-2x mb-3"></i>
+                    <strong>
+                        <span class="lang-content" data-lang="ne">वास्तविक प्रभाव</span>
+                        <span class="lang-content hidden" data-lang="en">Real Impact</span>
+                    </strong>
+                    <p class="mb-0">
+                        <span class="lang-content" data-lang="ne">राम्रो उत्पादनको लागि डेटा-आधारित निर्णयहरू</span>
+                        <span class="lang-content hidden" data-lang="en">Data-driven decisions for better yields</span>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</section>
+
+<!-- Stats Section -->
+<section class="stats-section">
+<div class="container">
+    <div class="row">
+        <div class="col-md-3">
+            <div class="stat-item">
+                <span class="stat-number">65%</span>
+                <span class="stat-label">
+                    <span class="lang-content" data-lang="ne">नेपालको जनसंख्या कृषिमा निर्भर</span>
+                    <span class="lang-content hidden" data-lang="en">of Nepal's population depends on agriculture</span>
+                </span>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stat-item">
+                <span class="stat-number">0</span>
+                <span class="stat-label">
+                    <span class="lang-content" data-lang="ne">कृषि सहायक भन्दा पहिले केन्द्रीय कृषि डेटाबेस</span>
+                    <span class="lang-content hidden" data-lang="en">Central agricultural databases before Krisi Sahayak</span>
+                </span>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stat-item">
+                <span class="stat-number">1000+</span>
+                <span class="stat-label">
+                    <span class="lang-content" data-lang="ne">सहायता पाउन तयार किसानहरू</span>
+                    <span class="lang-content hidden" data-lang="en">Farmers ready to be helped</span>
+                </span>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stat-item">
+                <span class="stat-number">1st</span>
+                <span class="stat-label">
+                    <span class="lang-content" data-lang="ne">नेपाली किसानहरूको लागि आवाज-संचालित AI सहायक</span>
+                    <span class="lang-content hidden" data-lang="en">Voice-driven AI assistant for Nepali farmers</span>
+                </span>
+            </div>
+        </div>
+    </div>
+</div>
+</section>
+
+<!-- Team Section -->
+<section class="py-5">
+<div class="container">
+    <h2 class="section-title">
+        <span class="lang-content" data-lang="ne">हाम्रो टोली</span>
+        <span class="lang-content hidden" data-lang="en">Meet Our Team</span>
+    </h2>
+    <p class="text-center mb-5" style="color: var(--earth-brown); font-size: 1.1rem;">
+        <span class="lang-content" data-lang="ne">नेपालमा कृषिमा क्रान्ति ल्याउन काम गरिरहेका प्रविधिविद् र कृषि अधिवक्ताहरूको भावुक टोली।</span>
+        <span class="lang-content hidden" data-lang="en">A passionate team of technologists and agricultural advocates working to revolutionize farming in Nepal.</span>
+    </p>
+    
+    <div class="row">
+        <div class="col-lg-4 col-md-6 mb-4">
+            <div class="team-card">
+                <div class="team-avatar">
+                    <img src="{% static 'logo/team1.jpg' %}" alt="Adhishri Pradhan">
+                </div>
+                <div class="team-name">Adhishri Pradhan</div>
+                <div class="team-role">
+                    <span class="lang-content" data-lang="ne">टोली नेता</span>
+                    <span class="lang-content hidden" data-lang="en">Team Lead</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-4 col-md-6 mb-4">
+            <div class="team-card">
+                <div class="team-avatar">
+                    <img src="{% static 'logo/team2.png' %}" alt="Prabesh Sunar">
+                </div>
+                <div class="team-name">Prabesh Sunar</div>
+                <div class="team-role">
+                    <span class="lang-content" data-lang="ne">व्यापार विश्लेषक</span>
+                    <span class="lang-content hidden" data-lang="en">Business Analyst</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-4 col-md-6 mb-4">
+            <div class="team-card">
+                <div class="team-avatar">
+                    <img src="{% static 'logo/team3.jpg' %}" alt="Drishya Shrestha">
+                </div>
+                <div class="team-name">Drishya Shrestha</div>
+                <div class="team-role">
+                    <span class="lang-content" data-lang="ne">सफ्टवेयर इन्जिनियर</span>
+                    <span class="lang-content hidden" data-lang="en">Software Engineer</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-4 col-md-6 mb-4 offset-lg-2">
+            <div class="team-card">
+                <div class="team-avatar">
+                    <img src="{% static 'logo/team4.jpg' %}" alt="Prasiddhi Gyawali">
+                </div>
+                <div class="team-name">Prasiddhi Gyawali</div>
+                <div class="team-role">
+                    <span class="lang-content" data-lang="ne">सफ्टवेयर इन्जिनियर</span>
+                    <span class="lang-content hidden" data-lang="en">Software Engineer</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-4 col-md-6 mb-4">
+            <div class="team-card">
+                <div class="team-avatar">
+                    <img src="{% static 'logo/team5.jpg' %}" alt="Tushar Joshi">
+                </div>
+                <div class="team-name">Tushar Joshi</div>
+                <div class="team-role">
+                    <span class="lang-content" data-lang="ne">सफ्टवेयर इन्जिनियर</span>
+                    <span class="lang-content hidden" data-lang="en">Software Engineer</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</section>
+
+<!-- Contact Section -->
+<section class="contact-section" id="contact">
+<div class="container">
+    <h2 class="section-title">Get In Touch</h2>
+    
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="contact-item">
+                <div class="contact-icon">
+                    <i class="fas fa-envelope"></i>
+                </div>
+                <div>
+                    <strong>Email</strong><br>
+                    <span class="text-muted">contact@greenwise.ai</span>
+                </div>
+            </div>
+            
+            <div class="contact-item">
+                <div class="contact-icon">
+                    <i class="fas fa-phone"></i>
+                </div>
+                <div>
+                    <strong>Phone</strong><br>
+                    <span class="text-muted">+977-XXX-XXXX-XXX</span>
+                </div>
+            </div>
+            
+            <div class="contact-item">
+                <div class="contact-icon">
+                    <i class="fas fa-map-marker-alt"></i>
+                </div>
+                <div>
+                    <strong>Location</strong><br>
+                    <span class="text-muted">Kathmandu, Nepal</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-6">
+            <div class="mission-card">
+                <h5 style="color: var(--primary-green);">Partner With Us</h5>
+                <p>Interested in collaborating? Whether you're an NGO, government agency, or agricultural organization, let's work together to transform farming in Nepal.</p>
+                <div class="mt-3">
+                    <span class="badge bg-success me-2">NGO Partnerships</span>
+                    <span class="badge bg-success me-2">Data Collaboration</span>
+                    <span class="badge bg-success">Technology Integration</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</section>
+
+<!-- Footer -->
+<footer class="py-4" style="background: var(--primary-green); color: white;">
+<div class="container">
+    <div class="row align-items-center">
+        <div class="col-md-6">
+            <p class="mb-0">&copy; 2025 GreenWise.ai. 
+                <span class="lang-content" data-lang="ne">सबै अधिकार सुरक्षित।</span>
+                <span class="lang-content hidden" data-lang="en">All rights reserved.</span>
+            </p>
+        </div>
+        <div class="col-md-6 text-md-end">
+            <p class="mb-0">
+                <span class="lang-content" data-lang="ne">नेपालको कृषि भविष्यलाई सशक्त बनाउँदै</span>
+                <span class="lang-content hidden" data-lang="en">Empowering Nepal's Agricultural Future</span>
+                🌱
+            </p>
+        </div>
+    </div>
+</div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+
+<script>
+// Language switching functionality
+let currentLanguage = 'ne';
+
+function switchLanguage(lang) {
+    currentLanguage = lang;
+    
+    // Update language buttons
+    document.querySelectorAll('.lang-btn').forEach(btn => {
+        btn.classList.remove('active');
+        if (btn.getAttribute('data-lang') === lang) {
+            btn.classList.add('active');
+        }
+    });
+    
+    // Show/hide content based on language
+    document.querySelectorAll('.lang-content').forEach(element => {
+        const elementLang = element.getAttribute('data-lang');
+        if (elementLang === lang) {
+            element.classList.remove('hidden');
+        } else {
+            element.classList.add('hidden');
+        }
+    });
+    
+    // Save language preference
+    localStorage.setItem('preferredLanguage', lang);
+}
+
+// Load saved language preference
+function loadLanguagePreference() {
+    const savedLang = localStorage.getItem('preferredLanguage') || 'ne';
+    switchLanguage(savedLang);
+}
+
+// Smooth scrolling animation
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+            target.scrollIntoView({
+                behavior: 'smooth'
+            });
+        }
+    });
+});
+
+// Add entrance animations on scroll
+const observerOptions = {
+    threshold: 0.1,
+    rootMargin: '0px 0px -50px 0px'
+};
+
+const observer = new IntersectionObserver(function(entries) {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            entry.target.style.opacity = '1';
+            entry.target.style.transform = 'translateY(0)';
+        }
+    });
+}, observerOptions);
+
+// Initialize on page load
+document.addEventListener('DOMContentLoaded', function() {
+    loadLanguagePreference();
+    
+    // Observe all cards and sections for animation
+    document.querySelectorAll('.team-card, .mission-card, .data-point').forEach(card => {
+        card.style.opacity = '0';
+        card.style.transform = 'translateY(20px)';
+        card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+        observer.observe(card);
+    });
+});
+</script>
+</body>
+</html>
