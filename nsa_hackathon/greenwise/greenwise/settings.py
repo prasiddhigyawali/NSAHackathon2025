@@ -46,7 +46,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'greenwiseai',
-    'bootstrap5',
+    'django_bootstrap5',
     'corsheaders'
 ]
 
@@ -137,3 +137,7 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+BOOTSTRAP5 = {
+    'required_css_class': 'required',
+}
