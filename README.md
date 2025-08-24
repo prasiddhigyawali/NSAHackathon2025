@@ -51,17 +51,40 @@ cd NSAHackathon2025
 
 ```
 ### 2️⃣ Backend Setup (Django)
-```bash
-cd backend
-python -m venv venv
-# Activate virtual environment
-# Windows:
-venv\Scripts\activate
-# Linux/Mac:
-source venv/bin/activate
+1. **Navigate to the project directory:**
+   ```bash
+   cd nsa_hackathon
+   ```
 
-pip install -r requirements.txt
-```
+2. **Create virtual environment:**
+   ```bash
+   python -m venv .
+   ```
+
+3. **Activate virtual environment:**
+   ```bash
+   # Windows:
+   source Scripts\activate
+   
+   # Linux/Mac:
+   source bin/activate
+   ```
+
+4. **Install dependencies from requirements.txt:**
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+5. **Navigate to Django project:**
+   ```bash
+   cd greenwise
+   ```
+
+6. **Run Django server:**
+   ```bash
+   python manage.py runserver
+   ```
+
 (Optional for now) Set up Google Cloud credentials:
 ```
 set GOOGLE_APPLICATION_CREDENTIALS="path/to/service-account.json"
