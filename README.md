@@ -35,7 +35,7 @@ This will help shape the future of food security in Nepal.
 
 - **Frontend:** Django Templates (HTML, CSS)
 - **Backend:** Django + REST API
-- **AI Integration:** Google Gemini LLM
+- **AI Integration:** OpenAI ChatGPT LLM
 - **Cloud Services:** Google Cloud Speech-to-Text, Text-to-Speech, Cloud Storage
 - **Version Control:** Git, GitHub
 
