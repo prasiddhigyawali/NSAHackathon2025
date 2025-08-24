@@ -62,7 +62,7 @@ source venv/bin/activate
 
 pip install -r requirements.txt
 ```
-Set up Google Cloud credentials:
+(Optional for now) Set up Google Cloud credentials:
 ```
 set GOOGLE_APPLICATION_CREDENTIALS="path/to/service-account.json"
 ```
