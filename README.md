@@ -96,5 +96,3 @@ Access the application via local server http://127.0.0.1:8000/.
 🌱 Prabesh Sunar - Business Analyst
 
 🌱 Prasiddhi Gyawali - Software Engineer
-
-🌱 Tushar Joshi - Software Engineer
