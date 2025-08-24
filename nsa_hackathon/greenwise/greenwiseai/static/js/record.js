@@ -70,7 +70,11 @@ function saveRecording() {
     .then(data => {
         if (data.success) {
             console.log("SUCCESS:", data);
-            setTimeout(() => location.reload(), 1000);
+            console.log("TRANSCRIPT: " + data.transcript);
+            console.log("TRANSLATION: " + data.translation);
+            console.log("SUCCESS:", data.data);
+            populateData(data.data);
+            showDashboard();
         } else {
             console.log("FAIL:", data);
         }
@@ -79,3 +83,76 @@ function saveRecording() {
         console.error('Error:', error);
     });
 }
+
+
+const unitMapping = {
+    "Seeds per acre": "seeds",
+    "Planting depth": "mm",
+    "Row spacing": "mm",
+    "Weekly irrigation": "time/week",
+    "Rainfall this month": "mm",
+    "Average temperature": "°C",
+    "Expected yield": "tons/acre",
+    "Expected revenue per acre": "NPR"
+};
+
+// Function to format numbers
+function formatNumber(value, key) {
+    if (key === "Seeds per acre") {
+        return value.toLocaleString();
+    }
+    if (key === "Expected revenue per acre") {
+        return `${value}`;
+    }
+    return value.toString();
+}
+
+// Function to create data item HTML
+function createDataItem(key, value) {
+    const formattedValue = formatNumber(value, key);
+    const unit = unitMapping[key];
+    const unitSpan = key === "Expected revenue per acre" ? "" : ` <span class="unit">${unit}</span>`;
+    
+    return `
+        <div class="data-item">
+            <span class="data-label">${key}: </span>
+            <span class="data-value">${formattedValue}${unitSpan}</span>
+        </div>
+    `;
+}
+
+// Function to populate data sections
+function populateData(farmData) {
+    // Populate planting data
+    const plantingContainer = document.getElementById('planting-data');
+    const plantingData = farmData['PLANTING DATA'];
+    plantingContainer.innerHTML = Object.entries(plantingData)
+        .map(([key, value]) => createDataItem(key, value))
+        .join('');
+
+    // Populate water data
+    const waterContainer = document.getElementById('water-data');
+    const waterData = farmData['WATER'];
+    waterContainer.innerHTML = Object.entries(waterData)
+        .map(([key, value]) => createDataItem(key, value))
+        .join('');
+
+    // Populate weather data
+    const weatherContainer = document.getElementById('weather-data');
+    const weatherData = farmData['WEATHER'];
+    weatherContainer.innerHTML = Object.entries(weatherData)
+        .map(([key, value]) => createDataItem(key, value))
+        .join('');
+
+    // Populate harvest data
+    const harvestContainer = document.getElementById('harvest-data');
+    const harvestData = farmData['PROJECTED HARVEST'];
+    harvestContainer.innerHTML = Object.entries(harvestData)
+        .map(([key, value]) => createDataItem(key, value))
+        .join('');
+}
+
+function showDashboard() {
+    document.getElementById("dashboard").classList.remove("d-none");
+    document.getElementById("record").classList.add("d-none");
+  }
