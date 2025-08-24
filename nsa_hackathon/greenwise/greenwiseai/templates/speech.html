@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+{% include "navbar.html"%}
+
+<!-- Record Button -->
+<div class="d-flex justify-content-center align-items-start vh-100 pt-5"> 
+    <button id="recordBtn" type="button" class="btn p-0 border-0 bg-transparent"> 
+        <img src="{% static 'logo/mic.png' %}" alt="Record" class="rounded-circle img-fluid" style="width:320px; height:320px; object-fit:cover;"> 
+    </button> 
+</div>
+
+<!-- Dashboard (hidden by default) -->
+<div class="container d-none" id="dashboard">
+  <div class="header">
+    <h3>Farm Management Dashboard</h3>
+  </div>
+
+  <div class="dashboard-grid">
+    <div class="card planting mb-3" id="planting-card">
+      <div class="card-header">
+        <label class="card-title">Planting Data</label>
+      </div>
+      <div id="planting-data" class="card-body">
+        <!-- Data will be populated by JavaScript -->
+      </div>
+    </div>
+
+    <div class="card water mb-3" id="water-card">
+      <div class="card-header">
+        <label class="card-title">Water Management</label>
+      </div>
+      <div id="water-data" class="card-body">
+        <!-- Data will be populated by JavaScript -->
+      </div>
+    </div>
+
+    <div class="card weather mb-3" id="weather-card">
+      <div class="card-header">
+        <label class="card-title">Weather Conditions</label>
+      </div>
+      <div id="weather-data" class="card-body">
+        <!-- Data will be populated by JavaScript -->
+      </div>
+    </div>
+
+    <div class="card harvest mb-3" id="harvest-card">
+      <div class="card-header">
+        <label class="card-title">Projected Harvest</label>
+      </div>
+      <div id="harvest-data" class="card-body">
+        <!-- Data will be populated by JavaScript -->
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock content %}
+
+{% block page_script %}
+<!-- Font Awesome -->
+<script type="text/javascript" src="{% static 'js/record.js' %}"></script> 
+{% endblock page_script %}

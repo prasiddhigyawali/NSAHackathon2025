@@ -1,64 +1,836 @@
-{% extends "base.html" %}
 {% load static %}
+<!DOCTYPE html>
+<html lang="ne" id="mainHtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>कृषि सहायक - Krisi Sahayak</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-green: #2E7D32;
+            --light-green: #81C784;
+            --accent-green: #4CAF50;
+            --earth-brown: #8D6E63;
+            --warm-yellow: #FFB74D;
+            --bg-cream: #F9F7ED;
+        }
 
-{% block content %}
-{% include "navbar.html"%}
+        body {
+            background: linear-gradient(135deg, var(--bg-cream) 0%, #E8F5E8 100%);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+        }
 
-<!-- Record Button -->
-<div class="d-flex justify-content-center align-items-start vh-100 pt-5"> 
-    <button id="recordBtn" type="button" class="btn p-0 border-0 bg-transparent"> 
-        <img src="{% static 'logo/mic.png' %}" alt="Record" class="rounded-circle img-fluid" style="width:320px; height:320px; object-fit:cover;"> 
-    </button> 
-</div>
+        .navbar {
+            background: linear-gradient(90deg, var(--primary-green), var(--accent-green));
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
 
-<!-- Dashboard (hidden by default) -->
-<div class="container d-none" id="dashboard">
-  <div class="header">
-    <h3>Farm Management Dashboard</h3>
-  </div>
+        .navbar-brand {
+            color: white !important;
+            font-size: 1.8rem;
+            font-weight: bold;
+        }
 
-  <div class="dashboard-grid">
-    <div class="card planting mb-3" id="planting-card">
-      <div class="card-header">
-        <label class="card-title">Planting Data</label>
-      </div>
-      <div id="planting-data" class="card-body">
-        <!-- Data will be populated by JavaScript -->
-      </div>
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--warm-yellow);
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 10px;
+        }
+
+        .chat-container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.1);
+            min-height: 500px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chat-header {
+            background: linear-gradient(90deg, var(--accent-green), var(--light-green));
+            color: white;
+            padding: 15px 20px;
+            border-radius: 20px 20px 0 0;
+            display: flex;
+            align-items: center;
+        }
+
+        .chat-messages {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            max-height: 400px;
+        }
+
+        .message {
+            margin-bottom: 15px;
+            display: flex;
+        }
+
+        .message.user {
+            justify-content: flex-end;
+        }
+
+        .message-bubble {
+            max-width: 80%;
+            padding: 12px 18px;
+            border-radius: 18px;
+            position: relative;
+        }
+
+        .message.user .message-bubble {
+            background: var(--primary-green);
+            color: white;
+        }
+
+        .message.ai .message-bubble {
+            background: #F1F8E9;
+            color: #2E7D32;
+            border: 2px solid var(--light-green);
+        }
+
+        .input-area {
+            padding: 20px;
+            border-top: 2px solid #E8F5E8;
+        }
+
+        .voice-btn {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, var(--accent-green), var(--light-green));
+            color: white;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .voice-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 20px rgba(76, 175, 80, 0.4);
+        }
+
+        .voice-btn.recording {
+            background: linear-gradient(45deg, #F44336, #FF5722);
+            animation: pulse 1.5s ease-in-out infinite alternate;
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(244, 67, 54, 0.7); }
+            100% { box-shadow: 0 0 0 20px rgba(244, 67, 54, 0); }
+        }
+
+        .send-btn {
+            background: var(--primary-green);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            padding: 10px 20px;
+            transition: all 0.3s ease;
+        }
+
+        .send-btn:hover {
+            background: var(--accent-green);
+            transform: translateY(-2px);
+        }
+
+        .weather-card, .news-card {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+
+        .weather-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(45deg, var(--warm-yellow), #FFC107);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: white;
+        }
+
+        .news-item {
+            padding: 10px 0;
+            border-bottom: 1px solid #E8F5E8;
+        }
+
+        .news-item:last-child {
+            border-bottom: none;
+        }
+
+        .farmer-avatar {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(45deg, var(--earth-brown), #A1887F);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.2rem;
+        }
+
+        .ai-avatar {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(45deg, var(--accent-green), var(--light-green));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.2rem;
+        }
+
+        .location-badge {
+            background: var(--warm-yellow);
+            color: var(--primary-green);
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .floating-action {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: var(--primary-green);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            font-size: 1.5rem;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            transition: all 0.3s ease;
+        }
+
+        .floating-action:hover {
+            transform: scale(1.1);
+            background: var(--accent-green);
+        }
+
+        .typing-indicator {
+            display: none;
+            padding: 10px;
+        }
+
+        .typing-dots {
+            display: inline-block;
+            position: relative;
+            width: 40px;
+            height: 10px;
+        }
+
+        .typing-dots div {
+            position: absolute;
+            top: 0;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--accent-green);
+            animation: typing 1.4s infinite ease-in-out both;
+        }
+
+        .typing-dots div:nth-child(1) { left: 0; animation-delay: -0.32s; }
+        .typing-dots div:nth-child(2) { left: 12px; animation-delay: -0.16s; }
+        .typing-dots div:nth-child(3) { left: 24px; animation-delay: 0s; }
+
+        @keyframes typing {
+            0%, 80%, 100% {
+                transform: scale(0);
+                opacity: 0.5;
+            }
+            40% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .feature-card {
+            text-align: center;
+            padding: 20px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(45deg, var(--accent-green), var(--light-green));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 15px;
+            color: white;
+            font-size: 1.5rem;
+        }
+
+        /* Language Switcher */
+        .language-switcher {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 25px;
+            padding: 5px;
+            display: flex;
+            align-items: center;
+        }
+
+        .lang-btn {
+            background: transparent;
+            border: none;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .lang-btn.active {
+            background: white;
+            color: var(--primary-green);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        }
+
+        .lang-btn:hover:not(.active) {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        /* Hidden class for translations */
+        .lang-content {
+            display: block;
+        }
+
+        .lang-content.hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center" href="#">
+                <img src="{% static 'logo/favicon.png' %}" width="40" height="40" class="me-2" alt="Krisi Sahayak Logo">
+                <span class="lang-content" data-lang="ne">कृषि सहायक</span>
+                <span class="lang-content hidden" data-lang="en">Farm Assistant</span>
+            </a>
+            
+            <!-- Language Switcher -->
+            <div class="language-switcher me-3">
+                <button class="lang-btn active" data-lang="ne" onclick="switchLanguage('ne')">
+                    नेपाली
+                </button>
+                <button class="lang-btn" data-lang="en" onclick="switchLanguage('en')">
+                    English
+                </button>
+            </div>
+            
+            <div class="d-flex align-items-center">
+                <a class="nav-link text-white me-3" href="{% url 'about' %}">
+                    <i class="fas fa-info-circle me-1"></i>
+                    <span class="lang-content" data-lang="ne">हाम्रो बारेमा</span>
+                    <span class="lang-content hidden" data-lang="en">About Us</span>
+                </a>
+                <span class="location-badge me-3">
+                    <i class="fas fa-map-marker-alt me-1"></i>
+                    <span class="lang-content" data-lang="ne">काठमाडौं, नेपाल</span>
+                    <span class="lang-content hidden" data-lang="en">Kathmandu, Nepal</span>
+                </span>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <div class="row">
+            <!-- Chat Interface -->
+            <div class="col-lg-8">
+                <div class="chat-container">
+                    <div class="chat-header">
+                        <div class="ai-avatar me-3">
+                            <img src="{% static 'logo/favicon.png' %}" width="30" height="30" alt="AI" style="border-radius: 50%;">
+                        </div>
+                        <div>
+                            <h5 class="mb-1">
+                                <span class="lang-content" data-lang="ne">कृषि सहायक AI</span>
+                                <span class="lang-content hidden" data-lang="en">Farm Assistant AI</span>
+                            </h5>
+                            <small>
+                                <span class="lang-content" data-lang="ne">तपाईंको खेतीबारीको साथी</span>
+                                <span class="lang-content hidden" data-lang="en">Your farming companion</span>
+                            </small>
+                        </div>
+                        <div class="ms-auto">
+                            <i class="fas fa-circle text-success"></i>
+                            <small>Online</small>
+                        </div>
+                    </div>
+
+                    <div class="chat-messages" id="chatMessages">
+                        <!-- Welcome Message -->
+                        <div class="message ai">
+                            <div class="ai-avatar me-3">
+                                <img src="{% static 'logo/favicon.png' %}" width="30" height="30" alt="AI" style="border-radius: 50%;">
+                            </div>
+                            <div class="message-bubble">
+                                <span class="lang-content" data-lang="ne">
+                                    नमस्कार! म तपाईंको कृषि सहायक हुँ। तपाईं मलाई आफ्नो खेतीबारीको बारेमा कुनै पनि प्रश्न सोध्न सक्नुहुन्छ। बोली वा लेखेर सोध्नुहोस्!
+                                </span>
+                                <span class="lang-content hidden" data-lang="en">
+                                    Hello! I'm your farm assistant. You can ask me any questions about farming and agriculture. Ask by voice or text!
+                                </span>
+                            </div>
+                        </div>
+
+                        <!-- Example conversation -->
+                        <div class="message user">
+                            <div class="message-bubble">
+                                <span class="lang-content" data-lang="ne">मेरो धान बाली पहेंलो भइरहेको छ। के गर्ने?</span>
+                                <span class="lang-content hidden" data-lang="en">My rice crop is turning yellow. What should I do?</span>
+                            </div>
+                            <div class="farmer-avatar ms-3">
+                                <i class="fas fa-user"></i>
+                            </div>
+                        </div>
+
+                        <div class="message ai">
+                            <div class="ai-avatar me-3">
+                                <img src="{% static 'logo/favicon.png' %}" width="30" height="30" alt="AI" style="border-radius: 50%;">
+                            </div>
+                            <div class="message-bubble">
+                                <span class="lang-content" data-lang="ne">
+                                    धान पहेंलो हुनुका केही कारण हुन सक्छन्:
+                                    <br>• नाइट्रोजनको कमी
+                                    <br>• फलामको कमी 
+                                    <br>• पानीको समस्या
+                                    <br><br>तपाईंले यूरिया मल प्रयोग गर्नुहोस् र पानीको व्यवस्था राम्रो राख्नुहोस्।
+                                </span>
+                                <span class="lang-content hidden" data-lang="en">
+                                    Rice turning yellow can be due to several reasons:
+                                    <br>• Nitrogen deficiency
+                                    <br>• Iron deficiency
+                                    <br>• Water management issues
+                                    <br><br>Apply urea fertilizer and ensure proper water management.
+                                </span>
+                            </div>
+                        </div>
+
+                        <!-- Typing indicator -->
+                        <div class="message ai typing-indicator" id="typingIndicator">
+                            <div class="ai-avatar me-3">
+                                <img src="{% static 'logo/favicon.png' %}" width="30" height="30" alt="AI" style="border-radius: 50%;">
+                            </div>
+                            <div class="message-bubble">
+                                <div class="typing-dots">
+                                    <div></div>
+                                    <div></div>
+                                    <div></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="input-area">
+                        <div class="row align-items-center">
+                            <div class="col-2">
+                                <button class="voice-btn" id="voiceBtn" onclick="toggleVoiceRecording()">
+                                    <i class="fas fa-microphone" id="voiceIcon"></i>
+                                </button>
+                            </div>
+                            <div class="col-8">
+                                <input type="text" class="form-control" id="messageInput" 
+                                       placeholder="आफ्नो प्रश्न लेख्नुहोस्..." 
+                                       onkeypress="handleKeyPress(event)">
+                            </div>
+                            <div class="col-2">
+                                <button class="send-btn w-100" onclick="sendMessage()">
+                                    <i class="fas fa-paper-plane"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sidebar -->
+            <div class="col-lg-4">
+                <!-- Weather Card -->
+                <div class="weather-card">
+                    <h6 class="mb-3">
+                        <i class="fas fa-cloud-sun me-2"></i>
+                        <span class="lang-content" data-lang="ne">आजको मौसम</span>
+                        <span class="lang-content hidden" data-lang="en">Today's Weather</span>
+                    </h6>
+                    <div class="row align-items-center">
+                        <div class="col-4">
+                            <div class="weather-icon">
+                                <i class="fas fa-sun"></i>
+                            </div>
+                        </div>
+                        <div class="col-8">
+                            <h4 class="mb-1">२८°C</h4>
+                            <p class="mb-1">
+                                <span class="lang-content" data-lang="ne">घाम र बादल</span>
+                                <span class="lang-content hidden" data-lang="en">Sunny & Cloudy</span>
+                            </p>
+                            <small class="text-muted">
+                                <span class="lang-content" data-lang="ne">आर्द्रता: ६५%</span>
+                                <span class="lang-content hidden" data-lang="en">Humidity: 65%</span>
+                            </small>
+                        </div>
+                    </div>
+                    <div class="mt-3">
+                        <small class="text-success">
+                            <i class="fas fa-info-circle me-1"></i>
+                            <span class="lang-content" data-lang="ne">फसल रोप्नको लागि राम्रो मौसम छ</span>
+                            <span class="lang-content hidden" data-lang="en">Good weather for planting crops</span>
+                        </small>
+                    </div>
+                </div>
+
+                <!-- News Card -->
+                <div class="news-card">
+                    <h6 class="mb-3">
+                        <i class="fas fa-newspaper me-2"></i>
+                        <span class="lang-content" data-lang="ne">कृषि समाचार</span>
+                        <span class="lang-content hidden" data-lang="en">Agriculture News</span>
+                    </h6>
+                    <div class="news-item">
+                        <small class="text-muted">
+                            <span class="lang-content" data-lang="ne">२ घण्टा अगाडि</span>
+                            <span class="lang-content hidden" data-lang="en">2 hours ago</span>
+                        </small>
+                        <p class="mb-1">
+                            <strong>
+                                <span class="lang-content" data-lang="ne">धान बीउ वितरण सुरु</span>
+                                <span class="lang-content hidden" data-lang="en">Rice Seed Distribution Started</span>
+                            </strong>
+                        </p>
+                        <small>
+                            <span class="lang-content" data-lang="ne">सरकारले उन्नत किसिमको धान बीउ वितरण गर्न थालेको छ।</span>
+                            <span class="lang-content hidden" data-lang="en">Government has started distributing improved rice seeds.</span>
+                        </small>
+                    </div>
+                    <div class="news-item">
+                        <small class="text-muted">
+                            <span class="lang-content" data-lang="ne">५ घण्टा अगाडि</span>
+                            <span class="lang-content hidden" data-lang="en">5 hours ago</span>
+                        </small>
+                        <p class="mb-1">
+                            <strong>
+                                <span class="lang-content" data-lang="ne">मल अनुदान कार्यक्रम</span>
+                                <span class="lang-content hidden" data-lang="en">Fertilizer Subsidy Program</span>
+                            </strong>
+                        </p>
+                        <small>
+                            <span class="lang-content" data-lang="ne">यो महिनाका लागि मल अनुदान दर घोषणा भएको छ।</span>
+                            <span class="lang-content hidden" data-lang="en">Fertilizer subsidy rates announced for this month.</span>
+                        </small>
+                    </div>
+                    <div class="news-item">
+                        <small class="text-muted">
+                            <span class="lang-content" data-lang="ne">१ दिन अगाडि</span>
+                            <span class="lang-content hidden" data-lang="en">1 day ago</span>
+                        </small>
+                        <p class="mb-1">
+                            <strong>
+                                <span class="lang-content" data-lang="ne">नयाँ कृषि प्रविधि</span>
+                                <span class="lang-content hidden" data-lang="en">New Agricultural Technology</span>
+                            </strong>
+                        </p>
+                        <small>
+                            <span class="lang-content" data-lang="ne">जैविक खेती प्रविधिको तालिम कार्यक्रम सञ्चालन हुँदै।</span>
+                            <span class="lang-content hidden" data-lang="en">Organic farming technology training programs are being conducted.</span>
+                        </small>
+                    </div>
+                </div>
+
+                <!-- Quick Features -->
+                <div class="row">
+                    <div class="col-6 mb-3">
+                        <div class="feature-card">
+                            <div class="feature-icon">
+                                <i class="fas fa-calendar-alt"></i>
+                            </div>
+                            <h6>
+                                <span class="lang-content" data-lang="ne">रोपाइं क्यालेन्डर</span>
+                                <span class="lang-content hidden" data-lang="en">Planting Calendar</span>
+                            </h6>
+                        </div>
+                    </div>
+                    <div class="col-6 mb-3">
+                        <div class="feature-card">
+                            <div class="feature-icon">
+                                <i class="fas fa-chart-line"></i>
+                            </div>
+                            <h6>
+                                <span class="lang-content" data-lang="ne">बजार मूल्य</span>
+                                <span class="lang-content hidden" data-lang="en">Market Price</span>
+                            </h6>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <div class="card water mb-3" id="water-card">
-      <div class="card-header">
-        <label class="card-title">Water Management</label>
-      </div>
-      <div id="water-data" class="card-body">
-        <!-- Data will be populated by JavaScript -->
-      </div>
-    </div>
+    <!-- Floating Action Button -->
+    <button class="floating-action" onclick="showQuickActions()">
+        <i class="fas fa-plus"></i>
+    </button>
 
-    <div class="card weather mb-3" id="weather-card">
-      <div class="card-header">
-        <label class="card-title">Weather Conditions</label>
-      </div>
-      <div id="weather-data" class="card-body">
-        <!-- Data will be populated by JavaScript -->
-      </div>
-    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script>
+        let isRecording = false;
+        let mediaRecorder;
+        let audioChunks = [];
+        let currentLanguage = 'ne';
 
-    <div class="card harvest mb-3" id="harvest-card">
-      <div class="card-header">
-        <label class="card-title">Projected Harvest</label>
-      </div>
-      <div id="harvest-data" class="card-body">
-        <!-- Data will be populated by JavaScript -->
-      </div>
-    </div>
-  </div>
-</div>
+        // Language switching functionality
+        function switchLanguage(lang) {
+            currentLanguage = lang;
+            
+            // Update language buttons
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.getAttribute('data-lang') === lang) {
+                    btn.classList.add('active');
+                }
+            });
+            
+            // Show/hide content based on language
+            document.querySelectorAll('.lang-content').forEach(element => {
+                const elementLang = element.getAttribute('data-lang');
+                if (elementLang === lang) {
+                    element.classList.remove('hidden');
+                } else {
+                    element.classList.add('hidden');
+                }
+            });
+            
+            // Update input placeholder
+            const messageInput = document.getElementById('messageInput');
+            if (lang === 'ne') {
+                messageInput.placeholder = 'आफ्नो प्रश्न लेख्नुहोस्...';
+                document.getElementById('mainHtml').lang = 'ne';
+            } else {
+                messageInput.placeholder = 'Type your question...';
+                document.getElementById('mainHtml').lang = 'en';
+            }
+            
+            // Save language preference
+            localStorage.setItem('preferredLanguage', lang);
+        }
 
-{% endblock content %}
+        // Load saved language preference
+        function loadLanguagePreference() {
+            const savedLang = localStorage.getItem('preferredLanguage') || 'ne';
+            switchLanguage(savedLang);
+        }
 
-{% block page_script %}
-<!-- Font Awesome -->
-<script type="text/javascript" src="{% static 'js/record.js' %}"></script> 
-{% endblock page_script %}
+        function toggleVoiceRecording() {
+            const voiceBtn = document.getElementById('voiceBtn');
+            const voiceIcon = document.getElementById('voiceIcon');
+            
+            if (!isRecording) {
+                startRecording();
+                voiceBtn.classList.add('recording');
+                voiceIcon.className = 'fas fa-stop';
+                isRecording = true;
+            } else {
+                stopRecording();
+                voiceBtn.classList.remove('recording');
+                voiceIcon.className = 'fas fa-microphone';
+                isRecording = false;
+            }
+        }
+
+        async function startRecording() {
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                mediaRecorder = new MediaRecorder(stream);
+                audioChunks = [];
+
+                mediaRecorder.ondataavailable = (event) => {
+                    audioChunks.push(event.data);
+                };
+
+                mediaRecorder.onstop = () => {
+                    const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
+                    processAudioMessage(audioBlob);
+                };
+
+                mediaRecorder.start();
+                console.log('Recording started');
+            } catch (error) {
+                console.error('Error accessing microphone:', error);
+                const errorMsg = currentLanguage === 'ne' ? 
+                    'माइक्रोफोन प्रयोग गर्न अनुमति दिनुहोस्' : 
+                    'Please allow microphone access';
+                alert(errorMsg);
+            }
+        }
+
+        function stopRecording() {
+            if (mediaRecorder && mediaRecorder.state === 'recording') {
+                mediaRecorder.stop();
+                mediaRecorder.stream.getTracks().forEach(track => track.stop());
+                console.log('Recording stopped');
+            }
+        }
+
+        function processAudioMessage(audioBlob) {
+            showTypingIndicator();
+            
+            setTimeout(() => {
+                hideTypingIndicator();
+                const errorMsg = currentLanguage === 'ne' ? 
+                    "माफ गर्नुहोस्, अहिले भ्वाइस प्रोसेसिङ काम गरिरहेको छैन। कृपया टेक्स्ट प्रयोग गर्नुहोस्।" :
+                    "Sorry, voice processing is not working yet. Please use text input.";
+                addAIMessage(errorMsg);
+            }, 2000);
+        }
+
+        function sendMessage() {
+            const input = document.getElementById('messageInput');
+            const message = input.value.trim();
+            
+            if (message) {
+                addUserMessage(message);
+                input.value = '';
+                
+                // Show AI typing
+                showTypingIndicator();
+                
+                // Send to backend with language info
+                fetch('/api/message/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        message: message,
+                        language: currentLanguage,
+                        type: 'text'
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    hideTypingIndicator();
+                    if (data.success) {
+                        addAIMessage(data.response);
+                    } else {
+                        const errorMsg = currentLanguage === 'ne' ? 
+                            'केही गल्ती भयो। फेरि प्रयास गर्नुहोस्।' :
+                            'Something went wrong. Please try again.';
+                        addAIMessage(errorMsg);
+                    }
+                })
+                .catch(error => {
+                    hideTypingIndicator();
+                    console.error('Error:', error);
+                    generateLocalResponse(message);
+                });
+            }
+        }
+
+        function generateLocalResponse(message) {
+            // Fallback local response if API fails
+            const responses = {
+                'ne': 'तपाईंको प्रश्न बुझिएको छ। कृपया केहि बेर पछि प्रयास गर्नुहोस्।',
+                'en': 'Your question is understood. Please try again later.'
+            };
+            addAIMessage(responses[currentLanguage]);
+        }
+
+        function addUserMessage(message) {
+            const chatMessages = document.getElementById('chatMessages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'message user';
+            messageDiv.innerHTML = `
+                <div class="message-bubble">${message}</div>
+                <div class="farmer-avatar ms-3">
+                    <i class="fas fa-user"></i>
+                </div>
+            `;
+            chatMessages.appendChild(messageDiv);
+            scrollToBottom();
+        }
+
+        function addAIMessage(message) {
+            const chatMessages = document.getElementById('chatMessages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'message ai';
+            messageDiv.innerHTML = `
+                <div class="ai-avatar me-3">
+                    <i class="fas fa-robot"></i>
+                </div>
+                <div class="message-bubble">${message}</div>
+            `;
+            chatMessages.appendChild(messageDiv);
+            scrollToBottom();
+        }
+
+        function showTypingIndicator() {
+            document.getElementById('typingIndicator').style.display = 'flex';
+            scrollToBottom();
+        }
+
+        function hideTypingIndicator() {
+            document.getElementById('typingIndicator').style.display = 'none';
+        }
+
+        function scrollToBottom() {
+            const chatMessages = document.getElementById('chatMessages');
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        function handleKeyPress(event) {
+            if (event.key === 'Enter') {
+                sendMessage();
+            }
+        }
+
+        function showQuickActions() {
+            const actions = currentLanguage === 'ne' ? 
+                'Quick actions feature coming soon!\n• मौसम चेतावनी\n• बजार मूल्य\n• खेती क्यालेन्डर\n• आपातकालीन सम्पर्क' :
+                'Quick actions feature coming soon!\n• Weather alerts\n• Market prices\n• Farming calendar\n• Emergency contacts';
+            alert(actions);
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Krisi Sahayak initialized');
+            loadLanguagePreference();
+        });
+    </script>
+</body>
+</html>
