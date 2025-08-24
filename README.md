@@ -89,7 +89,7 @@ Access the application via local server http://127.0.0.1:8000/.
 
 ## 👨‍🌾 Team Greenwise.ai
 
-🌱 Adhishri Pradhan – Team Lead
+🌱 Adishri Pradhan – Team Lead
 
 🌱 Drishya Shrestha - Software Engineer
 
