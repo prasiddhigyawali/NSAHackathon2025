@@ -3,6 +3,8 @@
 
 # 🌱 Krisi Sahayak – AI-Powered Farmer Assistant
 
+Winner for Best Business Impact - NSA Boston National Hackathon 2025
+
 **Krisi Sahayak** is a web application developed by Greenwise.ai to assist farmers in Nepal. Utilizing Google Cloud APIs, it offers voice and text-based agricultural guidance in Nepali and local dialects, providing real-time weather updates and localized crop recommendations.
 
 ## 🎯 Mission
